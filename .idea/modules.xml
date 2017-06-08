@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ImportSDKDemo.iml" filepath="$PROJECT_DIR$/ImportSDKDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Swoo-DJI-Android_PoC.iml" filepath="$PROJECT_DIR$/Swoo-DJI-Android_PoC.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dJISDKLIB/dJISDKLIB.iml" filepath="$PROJECT_DIR$/dJISDKLIB/dJISDKLIB.iml" />
     </modules>
