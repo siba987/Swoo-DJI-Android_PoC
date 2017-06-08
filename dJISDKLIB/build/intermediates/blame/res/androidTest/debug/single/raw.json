@@ -16,40 +16,40 @@
         "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1440x1088_wm620.h264"
     },
     {
-        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1760x720_wm620.h264",
-        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1760x720_wm620.h264"
-    },
-    {
         "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\effect_tick.ogg",
         "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\effect_tick.ogg"
     },
     {
-        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_960x720_3s.h264",
-        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_960x720_3s.h264"
+        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1760x720_wm620.h264",
+        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1760x720_wm620.h264"
     },
     {
         "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1080x720_gd600.h264",
         "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1080x720_gd600.h264"
     },
     {
-        "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1280x720_3s.h264",
-        "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1280x720_3s.h264"
+        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_960x720_3s.h264",
+        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_960x720_3s.h264"
     },
     {
         "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1088x720_wm620.h264",
         "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1088x720_wm620.h264"
     },
     {
+        "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1280x720_3s.h264",
+        "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1280x720_3s.h264"
+    },
+    {
         "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_cam_cap_4p.h264",
         "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_cam_cap_4p.h264"
     },
     {
-        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_p4p_720_3x2.h264",
-        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_p4p_720_3x2.h264"
-    },
-    {
         "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_1632x1080_wm620.h264",
         "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_1632x1080_wm620.h264"
+    },
+    {
+        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_p4p_720_3x2.h264",
+        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\raw\\iframe_p4p_720_3x2.h264"
     },
     {
         "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\iframe_gd600_1280x720.h264",

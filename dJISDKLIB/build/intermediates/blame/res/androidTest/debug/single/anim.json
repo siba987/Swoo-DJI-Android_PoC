@@ -16,16 +16,16 @@
         "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\anim\\core_zoom_enter.xml"
     },
     {
-        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\core_hold.xml",
-        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\anim\\core_hold.xml"
+        "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\core_zoom_enter_back.xml",
+        "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\anim\\core_zoom_enter_back.xml"
     },
     {
         "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\core_zoom_exit.xml",
         "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\anim\\core_zoom_exit.xml"
     },
     {
-        "merged": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\core_zoom_enter_back.xml",
-        "source": "C:\\Users\\Siba\\Dev\\Swoo-DJI-Android\\Swoo-DJI-Android_PoC\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\anim\\core_zoom_enter_back.xml"
+        "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\core_hold.xml",
+        "source": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\bundles\\debug\\res\\anim\\core_hold.xml"
     },
     {
         "merged": "C:\\Users\\Siba\\Dev\\Android-ImportAndActivateSDKInAndroidStudio\\ImportSDKDemo\\dJISDKLIB\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\core_zoom_enter_back.xml",
