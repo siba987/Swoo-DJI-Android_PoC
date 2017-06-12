@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\Siba\Dev\Swoo-DJI-Android\Swoo-DJI-Android_PoC\dJISDKLIB\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\Siba\Dev\Swoo-DJI-Android\Swoo-DJI-Android_PoC\dJISDKLIB\src\debug\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="C:\Users\Siba\Dev\Swoo-DJI-Android\DJI_Integration\dJISDKLIB\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\Siba\Dev\Swoo-DJI-Android\DJI_Integration\dJISDKLIB\src\debug\shaders"/></dataSet></merger>

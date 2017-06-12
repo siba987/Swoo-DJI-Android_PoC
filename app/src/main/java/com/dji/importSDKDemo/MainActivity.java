@@ -2,31 +2,45 @@ package com.dji.importSDKDemo;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ToggleButton;
+import dji.common.camera.SettingsDefinitions;
+import dji.common.camera.SystemState;
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
 import dji.sdk.base.BaseComponent;
 import dji.sdk.base.BaseProduct;
+import dji.sdk.camera.Camera;
+import dji.sdk.camera.VideoFeeder;
 import dji.sdk.sdkmanager.DJISDKManager;
 
-public class MainActivity extends AppCompatActivity {
-
+import dji.sdk.camera.VideoFeeder;
+public class MainActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener, TextView.OnClickListener {
     private static final String TAG = MainActivity.class.getName();
+    //protected DJICamera.CameraReceivedVideoDataCallback mReceivedVideoDataCallBack = null;
+    protected VideoFeeder.VideoDataCallback mReceivedVideoDataCallBack = null;
+
+    protected TextureView mVideoSurface = null;
+    private Button mCaptureBtn, mShootPhotoModeBtn, mRecordVideoModeBtn;
+    private ToggleButton mRecordBtn;
+    private TextView recordingTime;
 
     public static final String FLAG_CONNECTION_CHANGE = "dji_sdk_connection_change";
 
@@ -34,10 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler mHandler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
         // When the compile and target version is higher than 22, please request the following permission at runtime to ensure the SDK works well.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this,
@@ -52,74 +67,132 @@ public class MainActivity extends AppCompatActivity {
                     , 1);
         }
 
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+     //   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+     //   fab.setOnClickListener(new View.OnClickListener() {
+        initUI();
+
+        Camera camera = CameraApp.getCameraInstance();
+
+        if (camera != null) {
+
+            camera.setSystemStateCallback(new SystemState.Callback() {
+                @Override
+                public void onUpdate(SystemState cameraSystemState) {
+                    if (null != cameraSystemState) {
+
+                        int recordTime = cameraSystemState.getCurrentVideoRecordingTimeInSeconds();
+                        int minutes = (recordTime % 3600) / 60;
+                        int seconds = recordTime % 60;
+
+                        final String timeString = String.format("%02d:%02d", minutes, seconds);
+                        final boolean isVideoRecording = cameraSystemState.isRecording();
+
+                        MainActivity.this.runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                recordingTime.setText(timeString);
+
+                                /*
+                                 * Update recordingTime TextView visibility and mRecordBtn's check state
+                                 */
+                                if (isVideoRecording){
+                                    recordingTime.setVisibility(View.VISIBLE);
+                                }else
+                                {
+                                    recordingTime.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+    public void onReturn(View view){
+        this.finish();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+    }
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+    }
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        return false;
+    }
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+    }
+
+    private void initUI() {
+        // init mVideoSurface
+        mVideoSurface = (TextureView)findViewById(R.id.video_previewer_surface);
+        recordingTime = (TextView) findViewById(R.id.timer);
+        mCaptureBtn = (Button) findViewById(R.id.btn_capture);
+        mRecordBtn = (ToggleButton) findViewById(R.id.btn_record);
+        mShootPhotoModeBtn = (Button) findViewById(R.id.btn_shoot_photo_mode);
+        mRecordVideoModeBtn = (Button) findViewById(R.id.btn_record_video_mode);
+
+        if (null != mVideoSurface) {
+            mVideoSurface.setSurfaceTextureListener(this);
+        }
+
+        mCaptureBtn.setOnClickListener(this);
+        mRecordBtn.setOnClickListener(this);
+        mShootPhotoModeBtn.setOnClickListener(this);
+        mRecordVideoModeBtn.setOnClickListener(this);
+        recordingTime.setVisibility(View.INVISIBLE);
+        mRecordBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override //implement record feature
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
             }
         });
     }
-
-    /*
-     *  Implement DJISDKManager Callback methods
-     */
-    private DJISDKManager.SDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.SDKManagerCallback() {
-
-        @Override
-        public void onRegister(DJIError error) {
-            Log.d(TAG, error == null ? "success" : error.getDescription());
-            if(error == DJISDKError.REGISTRATION_SUCCESS) {
-                DJISDKManager.getInstance().startConnectionToProduct();
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
-                    }
-                });
-            } else {
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "register sdk failed, check if network is available", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-            }
-            Log.e("TAG", error.toString());
-        }
-
-        @Override
-        public void onProductChange(BaseProduct oldProduct, BaseProduct newProduct) {
-
-            mProduct = newProduct;
-            if(mProduct != null) {
-                mProduct.setBaseProductListener(mDJIBaseProductListener);
-            }
-
-            notifyStatusChange();
-        }
-    };
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        //Initialize DJI SDK Manager
-        mHandler = new Handler(Looper.getMainLooper());
-        DJISDKManager.getInstance().registerApp(this, mDJISDKManagerCallback);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_capture:{
+                break;
+            }
+            case R.id.btn_shoot_photo_mode:{
+                break;
+            }
+            case R.id.btn_record_video_mode:{
+                break;
+            }
+            default:
+                break;
+        }
     }
 
-    /*
+
+      /*
          *  Implement BaseProductListener methods
          */
     private BaseProduct.BaseProductListener mDJIBaseProductListener = new BaseProduct.BaseProductListener() {
