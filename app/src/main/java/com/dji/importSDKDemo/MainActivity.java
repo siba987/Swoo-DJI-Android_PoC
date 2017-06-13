@@ -25,22 +25,26 @@ import dji.common.camera.SettingsDefinitions;
 import dji.common.camera.SystemState;
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
+import dji.common.product.Model;
+import dji.common.util.CommonCallbacks;
 import dji.sdk.base.BaseComponent;
 import dji.sdk.base.BaseProduct;
 import dji.sdk.camera.Camera;
-import dji.sdk.camera.VideoFeeder;
+import dji.sdk.camera.Camera.VideoDataCallback;
+import dji.sdk.codec.DJICodecManager;
 import dji.sdk.sdkmanager.DJISDKManager;
 
 import dji.sdk.camera.VideoFeeder;
 public class MainActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener, TextView.OnClickListener {
     private static final String TAG = MainActivity.class.getName();
-    //protected DJICamera.CameraReceivedVideoDataCallback mReceivedVideoDataCallBack = null;
     protected VideoFeeder.VideoDataCallback mReceivedVideoDataCallBack = null;
+    //protected VideoFeeder.VideoDataCallback mReceivedVideoDataCallBack = null;
 
     protected TextureView mVideoSurface = null;
     private Button mCaptureBtn, mShootPhotoModeBtn, mRecordVideoModeBtn;
     private ToggleButton mRecordBtn;
     private TextView recordingTime;
+    protected DJICodecManager mCodecManager;
 
     public static final String FLAG_CONNECTION_CHANGE = "dji_sdk_connection_change";
 
@@ -67,12 +71,22 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                     , 1);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-     //   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+       //   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
      //   fab.setOnClickListener(new View.OnClickListener() {
         initUI();
+        // The callback for receiving the raw H264 video data for camera live view
+        mReceivedVideoDataCallBack = new VideoFeeder.VideoDataCallback() {
+
+            @Override
+            public void onReceive(byte[] videoBuffer, int size) {
+                if(mCodecManager != null){
+                    // Send the raw H264 video data to codec manager for decoding
+                    mCodecManager.sendDataToDecoder(videoBuffer, size);
+                }else {
+                    Log.e(TAG, "mCodecManager is null");
+                }
+            }
+        };
 
         Camera camera = CameraApp.getCameraInstance();
 
@@ -80,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 
             camera.setSystemStateCallback(new SystemState.Callback() {
                 @Override
-                public void onUpdate(SystemState cameraSystemState) {
-                    if (null != cameraSystemState) {
+                public void onUpdate(@NonNull SystemState cameraSystemState) {
 
                         int recordTime = cameraSystemState.getCurrentVideoRecordingTimeInSeconds();
                         int minutes = (recordTime % 3600) / 60;
@@ -108,20 +121,29 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                                 }
                             }
                         });
-                    }
                 }
             });
 
         }
 
     }
-
+    protected void onProductChange() {
+        initPreviewer();
+    }
     @Override
     public void onResume() {
+        Log.e(TAG, "onResume");
         super.onResume();
+        initPreviewer();
+        onProductChange();
+        if(mVideoSurface == null) {
+            Log.e(TAG, "mVideoSurface is null");
+        }
     }
     @Override
     public void onPause() {
+        Log.e(TAG, "onPause");
+        uninitPreviewer();
         super.onPause();
     }
     @Override
@@ -137,16 +159,57 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     }
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        Log.e(TAG, "onSurfaceTextureAvailable");
+        if (mCodecManager == null) {
+            mCodecManager = new DJICodecManager(this, surface, width, height);
+        }
     }
+
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+            Log.e(TAG, "onSurfaceTextureSizeChanged");
     }
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        Log.e(TAG,"onSurfaceTextureDestroyed");
+        if (mCodecManager != null) {
+            mCodecManager.cleanSurface();
+            mCodecManager = null;
+        }
         return false;
     }
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+    }
+
+    private void initPreviewer() {
+        BaseProduct product = CameraApp.getProductInstance();
+        try {
+            mProduct = CameraApp.getProductInstance();
+        } catch (Exception exception) {
+            mProduct = null;
+        }
+        if (product == null || !product.isConnected()) {
+            showToast(getString(R.string.disconnected));
+        } else {
+            if (null != mVideoSurface) {
+                mVideoSurface.setSurfaceTextureListener(this);
+            }
+            if (!product.getModel().equals(Model.UNKNOWN_AIRCRAFT))
+            {
+                if (VideoFeeder.getInstance().getVideoFeeds() != null
+                        && VideoFeeder.getInstance().getVideoFeeds().size() > 0) {
+                    VideoFeeder.getInstance().getVideoFeeds().get(0).setCallback(mReceivedVideoDataCallBack);
+                }
+            }
+        }
+    }
+    private void uninitPreviewer() {
+        Camera camera = CameraApp.getCameraInstance();
+        if (camera != null){
+            // Reset the callback
+            VideoFeeder.getInstance().getVideoFeeds().get(0).setCallback(null);
+        }
     }
 
     private void initUI() {
@@ -174,24 +237,63 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             }
         });
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_capture:{
+                startRecord();
                 break;
             }
             case R.id.btn_shoot_photo_mode:{
+                switchCameraMode(SettingsDefinitions.CameraMode.SHOOT_PHOTO);
                 break;
             }
             case R.id.btn_record_video_mode:{
+                switchCameraMode(SettingsDefinitions.CameraMode.RECORD_VIDEO);
                 break;
             }
             default:
                 break;
         }
     }
+    // Method for starting recording
+    private void startRecord(){
 
+        SettingsDefinitions.CameraMode cameraMode = SettingsDefinitions.CameraMode.RECORD_VIDEO;
+        final Camera camera = CameraApp.getCameraInstance();
+        if (camera != null) {
+            camera.startRecordVideo(new CommonCallbacks.CompletionCallback(){
+                @Override
+                public void onResult(DJIError error)
+                {
+                    if (error == null) {
+                        showToast("Record video: success");
+                    }else {
+                        showToast(error.getDescription());
+                    }
+                }
+            }); // Execute the startRecordVideo API
+        }
+    }
+    private void switchCameraMode(SettingsDefinitions.CameraMode cameraMode){
 
+        Camera camera = CameraApp.getCameraInstance();
+        if (camera != null) {
+            camera.setMode(cameraMode, new CommonCallbacks.CompletionCallback() {
+                @Override
+                public void onResult(DJIError error) {
+
+                    if (error == null) {
+                        showToast("Switch Camera Mode Succeeded");
+                    } else {
+                        showToast(error.getDescription());
+                    }
+                }
+            });
+        }
+
+    }
       /*
          *  Implement BaseProductListener methods
          */
@@ -240,6 +342,13 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+    public void showToast(final String msg) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
