@@ -49,8 +49,9 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     public static final String FLAG_CONNECTION_CHANGE = "dji_sdk_connection_change";
 
     private static BaseProduct mProduct;
+    private Camera mCamera = null;
 
-    private Handler mHandler;
+    private Handler handler;
 
 
     @Override
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
        //   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
      //   fab.setOnClickListener(new View.OnClickListener() {
         initUI();
+        handler = new Handler();
         // The callback for receiving the raw H264 video data for camera live view
         mReceivedVideoDataCallBack = new VideoFeeder.VideoDataCallback() {
 
@@ -213,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     }
 
     private void initUI() {
-        // init mVideoSurface
+        // init mVideoSurface, to set up event listener
         mVideoSurface = (TextureView)findViewById(R.id.video_previewer_surface);
         recordingTime = (TextView) findViewById(R.id.timer);
         mCaptureBtn = (Button) findViewById(R.id.btn_capture);
@@ -233,6 +235,11 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         mRecordBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override //implement record feature
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startRecord();
+                } else {
+                    stopRecord();
+                }
 
             }
         });
@@ -242,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_capture:{
-                startRecord();
+                captureAction();
                 break;
             }
             case R.id.btn_shoot_photo_mode:{
@@ -257,6 +264,37 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 break;
         }
     }
+
+    private void captureAction(){
+
+        final Camera camera = CameraApp.getCameraInstance();
+        if (camera != null) {
+
+            SettingsDefinitions.ShootPhotoMode photoMode = SettingsDefinitions.ShootPhotoMode.SINGLE; // Set the camera capture mode as Single mode
+            camera.setShootPhotoMode(photoMode, new CommonCallbacks.CompletionCallback(){
+                @Override
+                public void onResult(DJIError djiError) {
+                    if (null == djiError) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                camera.startShootPhoto(new CommonCallbacks.CompletionCallback() {
+                                    @Override
+                                    public void onResult(DJIError djiError) {
+                                        if (djiError == null) {
+                                            showToast("take photo: success");
+                                        } else {
+                                            showToast(djiError.getDescription());
+                                        }
+                                    }
+                                });
+                            }
+                        }, 2000);
+                    }
+                }
+            });
+        }
+    }
     // Method for starting recording
     private void startRecord(){
 
@@ -269,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
                 {
                     if (error == null) {
                         showToast("Record video: success");
+
                     }else {
                         showToast(error.getDescription());
                     }
@@ -276,6 +315,25 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
             }); // Execute the startRecordVideo API
         }
     }
+
+    // function for stopping recording
+    private void stopRecord() {
+        Camera camera = CameraApp.getCameraInstance();
+        if (camera != null) {
+            camera.stopRecordVideo(new CommonCallbacks.CompletionCallback() {
+
+                @Override
+                public void onResult(DJIError djiError) {
+                    if (djiError == null) {
+                        showToast("Stop recording: success");
+                    } else {
+                        showToast(djiError.getDescription());
+                    }
+                }
+            });
+        }
+    }
+
     private void switchCameraMode(SettingsDefinitions.CameraMode cameraMode){
 
         Camera camera = CameraApp.getCameraInstance();
@@ -294,48 +352,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         }
 
     }
-      /*
-         *  Implement BaseProductListener methods
-         */
-    private BaseProduct.BaseProductListener mDJIBaseProductListener = new BaseProduct.BaseProductListener() {
 
-        @Override
-        public void onComponentChange(BaseProduct.ComponentKey key, BaseComponent oldComponent, BaseComponent newComponent) {
-            if(newComponent != null) {
-                newComponent.setComponentListener(mDJIComponentListener);
-            }
-            notifyStatusChange();
-        }
-
-        @Override
-        public void onConnectivityChange(boolean isConnected) {
-            notifyStatusChange();
-        }
-
-    };
-
-    private BaseComponent.ComponentListener mDJIComponentListener = new BaseComponent.ComponentListener() {
-
-        @Override
-        public void onConnectivityChange(boolean isConnected) {
-            notifyStatusChange();
-        }
-
-    };
-
-    private void notifyStatusChange() {
-        mHandler.removeCallbacks(updateRunnable);
-        mHandler.postDelayed(updateRunnable, 500);
-    }
-
-    private Runnable updateRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
-            sendBroadcast(intent);
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

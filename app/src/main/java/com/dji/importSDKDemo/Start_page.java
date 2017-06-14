@@ -66,6 +66,7 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
         registerReceiver(mReceiver, filter);
     }
 
+
     @Override
     public void onResume() {
         Log.e(TAG, "onResume");
