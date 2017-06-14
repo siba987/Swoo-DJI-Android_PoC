@@ -7,15 +7,3 @@ api_keys.xml
 .DS_Store
 /build
 /captures
-build/generated/assets/
-build/generated/res/
-build/generated/source/aidl/
-build/generated/source/rs/
-build/intermediates/bundles/debug/aidl/
-build/intermediates/bundles/release/aidl/
-build/intermediates/dependency-cache/
-build/intermediates/lint/
-build/intermediates/manifest/tmp/
-build/intermediates/rs/
-build/intermediates/shaders/
-build/tmp/
