@@ -42,7 +42,7 @@
 
         <meta-data
             android:name="com.dji.sdk.API_KEY"
-            android:value="@api_keys/GET_API_TOKEN">
+            android:value="@string/GET_DJI_API" />
 
         <activity
             android:name="dji.sdk.sdkmanager.DJIAoaControllerActivity"

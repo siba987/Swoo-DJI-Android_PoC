@@ -47,19 +47,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="350dp"
         android:background="@drawable/round_btn"
-        android:text="Open"
+        android:text="@string/dji_connected"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         android:onClick="onClick"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="430dp"
-        android:text="@string/sdk_version"
-        android:textSize="15sp"
-        android:id="@+id/textView2" />
+
 </RelativeLayout>
 
 
