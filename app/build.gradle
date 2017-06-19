@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar','*.so'], dir: 'libs')
     compile project(':dJISDKLIB')
     compile project(':libvideoprp')
 

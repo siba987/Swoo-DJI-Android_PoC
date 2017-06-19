@@ -1,4 +1,8 @@
 package com.dji.importSDKDemo;
+import io.agora.rtc.Constants;
+import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc.RtcEngine;
+import io.agora.rtc.video.VideoCanvas;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -10,19 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import dji.common.error.DJIError;
-import dji.common.error.DJISDKError;
-import dji.sdk.base.BaseComponent;
 import dji.sdk.base.BaseProduct;
 import dji.sdk.products.Aircraft;
-import dji.sdk.sdkmanager.DJISDKManager;
 
 
 public class Start_page extends AppCompatActivity implements View.OnClickListener {
@@ -34,7 +33,7 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
 
     private TextView mTextConnectionStatus;
     private TextView mTextProduct;
-    private Button mBtnOpen;
+    private Button mBtnOpen,mBtnTX, mBtnRX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +101,12 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
         mTextConnectionStatus = (TextView) findViewById(R.id.text_connection_status);
         mTextProduct = (TextView) findViewById(R.id.text_product_info);
         mBtnOpen = (Button) findViewById(R.id.btn_open);
+        mBtnTX = (Button) findViewById(R.id.btn_transmit);
+        mBtnRX = (Button) findViewById(R.id.btn_receive);
+
         mBtnOpen.setOnClickListener(this);
+        mBtnTX.setOnClickListener(this);
+        mBtnRX.setOnClickListener(this);
         mBtnOpen.setEnabled(false);
 
     }
@@ -140,15 +144,36 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+    public void forwardToLiveRoom(int cRole) {
+        final TextView v_room = (TextView) findViewById(R.id.room_name);
+        String room = v_room.getText().toString();
+
+        Intent i = new Intent(Start_page.this, VideoChatViewActivity.class);
+        i.putExtra(ConstantApp.ACTION_KEY_CROLE, cRole);
+        i.putExtra(ConstantApp.ACTION_KEY_ROOM_NAME, room);
+        startActivity(i);
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
             case R.id.btn_open: {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, CameraViewActivity.class);
                 startActivity(intent);
                 break;
+            }
+            case R.id.btn_transmit:{
+                Intent intent = new Intent(this, VideoChatViewActivity.class); //create new activity TXActivity
+    //            Start_page.this.forwardToLiveRoom(Constants.CLIENT_ROLE_AUDIENCE);
+                startActivity(intent);
+                break;
+            }
+            case R.id.btn_receive:{
+                Intent intent = new Intent(this, RXActivity.class); //create new activity RXActvity
+                startActivity(intent);
+                break;
+
             }
             default:
                 break;

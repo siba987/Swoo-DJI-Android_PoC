@@ -1,9 +1,6 @@
 /build
 
-# Local configuration file (sdk path, etc)
-local.properties
-
 #API Keys
-app/src/main/res/values/api_keys.xml
+/src/main/res/values/api_keys.xml
 
 
